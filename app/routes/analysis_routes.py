@@ -17,8 +17,6 @@ def get_all_devices_using_bluetooth():
    res = find_bluetooth_connections()
    return jsonify(res)
 
-
-
 @phone_blueprint.route("/all_devices/signal_strength", methods=['GET'])
 def get_all_devices_by_signal_strength():
    res = devices_by_signal_strength()
@@ -34,7 +32,6 @@ def get_all_devices_connected_to_device():
       return jsonify({"device_id": device_id, "connected_count": connected_count}), 200
    except Exception as e:
       return jsonify({"error": str(e)}), 500
-
 
 @phone_blueprint.route("/direct_connection_between_two_devices", methods=['GET'])
 def determine_direct_connection_between_two_devices_route():

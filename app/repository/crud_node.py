@@ -78,6 +78,17 @@ def update_node(node_type: str, node_id: int, node: T) -> Maybe:
         return Maybe.from_optional(res.get("n")).map(lambda n: dict(n))
 
 @curry
+def delete_all_nodes(node_type: str) -> Dict[str, Any]:
+    with driver.session() as session:
+        query = f"""
+        MATCH (n:{node_type})
+        DETACH DELETE n
+        RETURN COUNT(*) as deletedCount
+        """
+        res = session.run(query).single()["deletedCount"]
+        return {"success": res > 0, "deletedCount": res}
+
+@curry
 def delete_node(node_type: str, node_id: int) -> Dict[str, Any]:
     with driver.session() as session:
         query = f"""
