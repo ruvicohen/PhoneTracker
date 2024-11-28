@@ -6,7 +6,7 @@ from app.service.interaction_service import process_interaction
 phone_blueprint = Blueprint('phone_blueprint', __name__)
 
 @phone_blueprint.route("/", methods=['POST'])
-def get_interaction():
+def process_interaction_route():
    interaction = request.json
    print(interaction)
    process_interaction(interaction)
@@ -14,19 +14,27 @@ def get_interaction():
 
 @phone_blueprint.route("/all_devices_using_bluetooth", methods=['GET'])
 def get_all_devices_using_bluetooth():
-   res = find_bluetooth_connections()
-   return jsonify(res)
+   try:
+      res = find_bluetooth_connections()
+      return jsonify(res), 200
+   except Exception as e:
+      return jsonify({"error": str(e)}), 500
 
 @phone_blueprint.route("/all_devices/signal_strength", methods=['GET'])
 def get_all_devices_by_signal_strength():
-   res = devices_by_signal_strength()
-   return jsonify({"res": res }), 200
+   try:
+      res = devices_by_signal_strength()
+      return jsonify({"res": res }), 200
+   except Exception as e:
+      return jsonify({"error": str(e)}), 500
 
 @phone_blueprint.route("/all_devices/connected_to_device", methods=['GET'])
 def get_all_devices_connected_to_device():
    device_id = request.args.get('device_id')
+
    if not device_id:
       return jsonify({"error": "device_id parameter is required"}), 400
+
    try:
       connected_count = count_connected_devices(device_id)
       return jsonify({"device_id": device_id, "connected_count": connected_count}), 200
@@ -42,7 +50,6 @@ def determine_direct_connection_between_two_devices_route():
       return jsonify({"error": "Both device_id_1 and device_id_2 parameters are required"}), 400
 
    try:
-      # Check if the devices are directly connected
       is_connected = determine_direct_connection_between_two_devices(device_id_1, device_id_2)
       return jsonify({
          "device_id_1": device_id_1,
@@ -60,7 +67,7 @@ def get_most_recent_interaction():
    if not device_id:
       return jsonify({"error": "device_id parameter is required"}), 400
    try:
-      timestamp = get_most_recent_interaction_repo(device_id)
-      return jsonify({"device_id": device_id, "timestamp": timestamp}), 200
+      most_interaction = get_most_recent_interaction_repo(device_id)
+      return jsonify({"device_id": device_id, "most_interaction": most_interaction}), 200
    except Exception as e:
       return jsonify({"error": str(e)}), 500

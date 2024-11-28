@@ -1,6 +1,4 @@
 from dataclasses import dataclass
-from app.db.model.location import Location
-
 
 @dataclass
 class Device:

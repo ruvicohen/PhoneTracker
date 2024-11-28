@@ -33,6 +33,6 @@ query_determine_direct_connection_between_two_devices = """
 query_most_recent_interaction_repo = f"""
         MATCH (d:Device)-[r:Interaction]->(:Device)
         WHERE d.id =  $device_id
-        RETURN r.timestamp AS timestamp
+        RETURN r AS most_interaction
         ORDER BY r.timestamp DESC
         LIMIT 1"""

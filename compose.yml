@@ -26,24 +26,13 @@ services:
    restart: always
    ports:
      - "5000:5000"
-   depends_on:
-     - broker0
-     - broker1
-     - broker2
-     - postgres
-     - mongodb
+
 
  consumer_explosive:
    build:
      context: .
      dockerfile: Dockerfile_explosive
    restart: always
-   depends_on:
-     - broker1
-     - broker2
-     - flask-app
-     - postgres
-     - mongodb
 
 
 
