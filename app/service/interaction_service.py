@@ -45,15 +45,13 @@ def check_duplicate_device(device1, device2):
 def process_interaction(data):
     devices = data['devices']
     interaction = data['interaction']
-
     device1 = devices[0]
     location1 = device1['location']
     device2 = devices[1]
     location2 = device2['location']
     device_instance1 = device_instance(device1, location1)
     device_instance2 = device_instance(device2, location2)
-    create_device(device_instance1)
-    create_device(device_instance2)
-
     if not check_duplicate_device(device_instance1, device_instance2):
+        create_device(device_instance1)
+        create_device(device_instance2)
         add_interaction_service(interaction)
