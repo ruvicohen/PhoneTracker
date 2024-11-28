@@ -1,6 +1,4 @@
 from dataclasses import asdict
-from dis import Instruction
-
 from app.db.model.device import Device
 from app.db.model.interaction import Interaction
 from app.repository.device_repository import create_device, add_interaction
@@ -28,26 +26,32 @@ def interaction_details(interaction):
         timestamp=interaction['timestamp']
     )
 
+def add_interaction_service(interaction):
+    from_device = interaction['from_device']
+    to_device = interaction['to_device']
+    interaction = interaction_details(interaction)
+    interaction = asdict(interaction)
+    add_interaction(from_device, to_device, interaction)
+
+def check_duplicate_device(device1, device2):
+    return (
+        device1.id == device2.id or
+        device1.latitude == device2.latitude and device1.longitude == device2.longitude
+    )
+
 def process_interaction(data):
-        # Parse and store interaction data
-        for d in data:
-            devices = d['devices']
-            interaction = d['interaction']
+    for d in data:
+        devices = d['devices']
+        interaction = d['interaction']
 
-            device1 = devices[0]
-            location1 = device1['location']
-            device2 = devices[1]
-            location2 = device2['location']
-            device_instance1 = device_instance(device1, location1)
-            device_instance2 = device_instance(device2, location2)
-            create_device(device_instance1)
-            create_device(device_instance2)
+        device1 = devices[0]
+        location1 = device1['location']
+        device2 = devices[1]
+        location2 = device2['location']
+        device_instance1 = device_instance(device1, location1)
+        device_instance2 = device_instance(device2, location2)
+        create_device(device_instance1)
+        create_device(device_instance2)
 
-            for k in interaction:
-                print(type(interaction[k]))
-            #Add interaction
-            from_device = interaction['from_device']
-            to_device = interaction['to_device']
-            interaction = interaction_details(interaction)
-            interaction = asdict(interaction)
-            add_interaction(from_device, to_device, interaction)
+        if not check_duplicate_device(device_instance1, device_instance2):
+            add_interaction_service(interaction)

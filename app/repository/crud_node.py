@@ -99,8 +99,8 @@ def create_relationship(relationship_type: str,source_type: str,target_type: str
         if relationship_props:
             props_clause = f"{{ {', '.join([f'{k}: ${k}' for k in relationship_props.keys()])} }}"
         query = f"""
-            MATCH (s:{source_type}) WHERE id(s) = $source_node_id
-            MATCH (t:{target_type}) WHERE id(t) = $target_node_id
+            MATCH (s:{source_type}) WHERE s.id = $source_node_id
+            MATCH (t:{target_type}) WHERE t.id = $target_node_id
             MERGE (s)-[r:{relationship_type} {props_clause}]->(t)
             RETURN r
             """

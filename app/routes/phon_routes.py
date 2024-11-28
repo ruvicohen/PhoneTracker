@@ -4,43 +4,29 @@ from app.service.interaction_service import process_interaction
 
 phone_blueprint = Blueprint('phone_blueprint', __name__)
 
-@phone_blueprint.route("/api/phone_tracker", methods=['POST'])
+@phone_blueprint.route("/", methods=['POST'])
 def get_interaction():
    interaction = request.json
    print(interaction)
    process_interaction(interaction)
    return jsonify({ }), 200
 
-# Expose flask’s endpoint for finding all devices connected to each other using the Bluetooth method, and how long is the path.
-#
-# Expose flask’s endpoint for finding all devices connected to each other with a signal strength stronger than -60.
-#
-# Expose a Flask endpoint to count how many devices are connected to a specific device based on a provided ID.
-#
-# Expose a Flask endpoint to determine whether there is a direct connection between two devices.
-#
-# Expose a Flask endpoint to fetch the most recent interaction for a specific device, sorted by timestamp.\
-
-@phone_blueprint.route("/api/phone_tracker/all_devices", methods=['GET'])
-def get_all_devices():
-   return jsonify({ }), 200
-
-@phone_blueprint.route("/api/phone_tracker/all_devices/<id>", methods=['GET'])
-def get_all_devices_by_id(id):
+@phone_blueprint.route("/all_devices_using_bluetooth", methods=['GET'])
+def get_all_devices_using_bluetooth():
    return jsonify({ }), 200
 
 @phone_blueprint.route("/api/phone_tracker/all_devices/signal_strength", methods=['GET'])
 def get_all_devices_by_signal_strength():
    return jsonify({ }), 200
 
-@phone_blueprint.route("/api/phone_tracker/all_devices/path_length", methods=['GET'])
-def get_all_devices_by_path_length():
+@phone_blueprint.route("/api/phone_tracker/all_devices/connected_to_device", methods=['GET'])
+def get_all_devices_connected_to_device():
    return jsonify({ }), 200
 
-@phone_blueprint.route("/api/phone_tracker/all_devices/direct_connection", methods=['GET'])
-def get_all_devices_by_direct_connection():
+@phone_blueprint.route("/api/phone_tracker/direct_connection_between_two_devices", methods=['GET'])
+def determine_direct_connection_between_two_devices():
    return jsonify({ }), 200
 
-@phone_blueprint.route("/api/phone_tracker/all_devices/last_interaction", methods=['GET'])
-def get_all_devices_by_last_interaction():
+@phone_blueprint.route("/api/phone_tracker/most_recent_interaction", methods=['GET'])
+def get_most_recent_interaction():
    return jsonify({ }), 200
