@@ -44,5 +44,4 @@ def get_most_recent_interaction_repo(device_id: str) -> dict:
        result = session.run(query, params)
        record = result.single()
        most_interaction = record["most_interaction"]
-       print(dict(most_interaction))
-       return record["most_interaction"] if record else {"error" : "not found interactions"}
+       return dict(most_interaction) if record else {"error" : "not found interactions"}
