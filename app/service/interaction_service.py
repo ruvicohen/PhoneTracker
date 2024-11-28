@@ -7,6 +7,7 @@ from app.repository.device_repository import create_device, add_interaction
 def device_instance(device, location):
     return Device(
             id=device['id'],
+            name=device['name'],
             brand=device['brand'],
             model=device['model'],
             os=device['os'],
@@ -18,6 +19,8 @@ def device_instance(device, location):
 
 def interaction_details(interaction):
     return Interaction(
+        from_device=interaction['from_device'],
+        to_device=interaction['to_device'],
         method=interaction['method'],
         bluetooth_version=interaction['bluetooth_version'],
         signal_strength_dbm=interaction['signal_strength_dbm'],
@@ -40,18 +43,17 @@ def check_duplicate_device(device1, device2):
     )
 
 def process_interaction(data):
-    for d in data:
-        devices = d['devices']
-        interaction = d['interaction']
+    devices = data['devices']
+    interaction = data['interaction']
 
-        device1 = devices[0]
-        location1 = device1['location']
-        device2 = devices[1]
-        location2 = device2['location']
-        device_instance1 = device_instance(device1, location1)
-        device_instance2 = device_instance(device2, location2)
-        create_device(device_instance1)
-        create_device(device_instance2)
+    device1 = devices[0]
+    location1 = device1['location']
+    device2 = devices[1]
+    location2 = device2['location']
+    device_instance1 = device_instance(device1, location1)
+    device_instance2 = device_instance(device2, location2)
+    create_device(device_instance1)
+    create_device(device_instance2)
 
-        if not check_duplicate_device(device_instance1, device_instance2):
-            add_interaction_service(interaction)
+    if not check_duplicate_device(device_instance1, device_instance2):
+        add_interaction_service(interaction)
